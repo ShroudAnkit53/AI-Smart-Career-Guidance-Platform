@@ -52,9 +52,9 @@ def init_db():
             )
         """)
         conn.commit(); cur.close(); conn.close()
-        print("✅ Database ready")
+        print(" Database ready")
     except Exception as e:
-        print(f"❌ DB init error: {e}"); traceback.print_exc()
+        print(f" DB init error: {e}"); traceback.print_exc()
 
 # ─── DATASET ─────────────────────────────────────────────────────────────────
 _df: pd.DataFrame = None
@@ -116,7 +116,7 @@ def load_dataset() -> pd.DataFrame:
         "Soft_Skills": "Soft Skills",
     })
 
-    print(f"📂 Dataset: {len(df)} raw rows → {len(df_grouped)} unique job titles")
+    print(f" Dataset: {len(df)} raw rows → {len(df_grouped)} unique job titles")
     return df_grouped
 
 # ─── MODEL TRAINING ───────────────────────────────────────────────────────────
@@ -133,15 +133,15 @@ def train_model(force: bool = False):
     _df = load_dataset()
 
     if not force and os.path.exists(MODEL_PATH):
-        print(f"📦 Loading cached model from '{MODEL_PATH}' ...")
+        print(f" Loading cached model from '{MODEL_PATH}' ...")
         with open(MODEL_PATH, "rb") as f:
             saved = pickle.load(f)
         _vectorizer   = saved["vectorizer"]
         _tfidf_matrix = saved["tfidf_matrix"]
-        print(f"✅ Model ready  |  {len(_df)} unique roles  |  vocab={len(_vectorizer.vocabulary_)}")
+        print(f" Model ready  |  {len(_df)} unique roles  |  vocab={len(_vectorizer.vocabulary_)}")
         return
 
-    print(f"🏋️  Training TF-IDF on {len(_df)} unique job roles ...")
+    print(f"  Training TF-IDF on {len(_df)} unique job roles ...")
     corpus = (
         _df["Job Title"]   + " " +
         _df["Description"] + " " +
@@ -160,7 +160,7 @@ def train_model(force: bool = False):
 
     with open(MODEL_PATH, "wb") as f:
         pickle.dump({"vectorizer": _vectorizer, "tfidf_matrix": _tfidf_matrix}, f)
-    print(f"✅ Model trained & saved → '{MODEL_PATH}'  |  vocab={len(_vectorizer.vocabulary_)}")
+    print(f" Model trained & saved → '{MODEL_PATH}'  |  vocab={len(_vectorizer.vocabulary_)}")
 
 # ─── INFERENCE ────────────────────────────────────────────────────────────────
 def find_best_job(job_title: str, job_description: str):
@@ -242,7 +242,7 @@ def get_youtube(skills: list) -> dict:
             else:
                 resources[skill] = fallback
         except Exception as e:
-            print(f"⚠️  YouTube '{skill}': {e}")
+            print(f"  YouTube '{skill}': {e}")
             resources[skill] = fallback
     return resources
 
@@ -352,7 +352,7 @@ def analyze():
             analysis_id = cur.lastrowid
             cur.close(); conn.close()
         except Exception as db_err:
-            print(f"⚠️  DB save skipped: {db_err}")
+            print(f"  DB save skipped: {db_err}")
 
         return jsonify({
             "id":                    analysis_id,
