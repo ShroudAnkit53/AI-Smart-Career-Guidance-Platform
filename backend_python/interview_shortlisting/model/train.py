@@ -230,7 +230,7 @@ def build_corpus(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.reset_index(drop=True)
 
-    print("\n📦 Combined Corpus")
+    print("\n Combined Corpus")
     print("Rows :", len(df))
 
     return df
@@ -259,7 +259,7 @@ def train_vectorizer(
 
     vectorizer.fit(all_texts)
 
-    print("\n🔧 TF-IDF")
+    print("\n TF-IDF")
     print(
         "Vocabulary size :",
         len(vectorizer.vocabulary_)
@@ -384,7 +384,7 @@ def train_calibrator(
     Linear Regression using ALL 4 features.
     """
 
-    print("\n📐 Training Linear Regression (4 features)")
+    print("\n Training Linear Regression (4 features)")
 
     # Build same 4-feature matrix used by classifier
     X = build_feature_matrix(df, vectorizer)
@@ -414,10 +414,10 @@ def train_calibrator(
     # Evaluation
     r2 = reg.score(X_test_s, y_test)
 
-    print("\n📊 Linear Regression Metrics")
+    print("\n Linear Regression Metrics")
     print("R² Score :", round(r2, 4))
 
-    print("\n📌 Feature Coefficients")
+    print("\n Feature Coefficients")
     print(f"  m1 (cosine_similarity)      = {reg.coef_[0]:.4f}")
     print(f"  m2 (resume_length)          = {reg.coef_[1]:.4f}")
     print(f"  m3 (resume_keyword_density) = {reg.coef_[2]:.4f}")
@@ -469,7 +469,7 @@ def train_classifier(
       Without balanced -> model predicts No Fit for everything
       balanced -> minority classes get proportionally higher weight
     """
-    print("\n🎯 Training Logistic Regression  (4 features)")
+    print("\n Training Logistic Regression  (4 features)")
 
     # Build 4-feature matrix
     X = build_feature_matrix(df, vectorizer)
@@ -502,7 +502,7 @@ def train_classifier(
     )
     clf.fit(X_train_s, y_train)
 
-    print("\n✅ Classifier trained")
+    print("\n Classifier trained")
     print("Features expected :", clf.n_features_in_)
 
     # ── Evaluation ────────────────────────────────────────────────────────────
@@ -513,7 +513,7 @@ def train_classifier(
     recall    = recall_score(y_test, y_pred, average="weighted", zero_division=0)
     f1        = f1_score(y_test, y_pred, average="weighted", zero_division=0)
 
-    print("\n📊 Classification Metrics  (4 features)")
+    print("\n Classification Metrics  (4 features)")
     print("═" * 50)
     print("Accuracy  :", round(accuracy  * 100, 2), "%")
     print("Precision :", round(precision * 100, 2), "%")
@@ -521,7 +521,7 @@ def train_classifier(
     print("F1 Score  :", round(f1        * 100, 2), "%")
     print("═" * 50)
 
-    print("\n📋 Classification Report")
+    print("\n Classification Report")
     print(classification_report(
         y_test, y_pred,
         labels=CLASS_LABELS,
@@ -529,7 +529,7 @@ def train_classifier(
     ))
 
     cm = confusion_matrix(y_test, y_pred, labels=CLASS_LABELS)
-    print("\n🔲 Confusion Matrix")
+    print("\n Confusion Matrix")
     print(f"  {'':20s} {'No Fit':>10} {'Potential':>12} {'Good Fit':>10}")
     print("  " + "─" * 55)
     for i, label in enumerate(CLASS_LABELS):
@@ -557,7 +557,7 @@ def save_artifacts(vectorizer, calibrator, classifier, scaler):
         with open(path, "wb") as f:
             pickle.dump(obj, f)
 
-    print("\n💾 Artifacts Saved")
+    print("\n Artifacts Saved")
     print("  tfidf_vectorizer.pkl -> TF-IDF vocabulary (10,000 words)")
     print("  calibrator.pkl       -> Linear Regression (ATS score, 4 features)")
     print("  classifier.pkl       -> Logistic Regression (verdict label, 4 features)")
@@ -604,7 +604,7 @@ def main():
     # Load Datasets
     # ──────────────────────────────────────────────────────────────────
 
-    print("\n📂 Loading datasets...")
+    print("\n Loading datasets...")
 
     df1 = load_dataset1(args.ds1)
 
@@ -632,7 +632,7 @@ def main():
     )
 
    # Load
-    print("\n📂 Loading datasets...")
+    print("\n Loading datasets...")
     df1 = load_dataset1(args.ds1)
     print("Dataset 1 rows :", len(df1))
     df2 = load_dataset2(args.ds2)
@@ -653,7 +653,7 @@ def main():
     # Save all 4 artifacts
     save_artifacts(vectorizer, calibrator, classifier, scaler)
 
-    print("\n✅ Training Complete!")
+    print("\n Training Complete!")
     print("Next step -> python app.py")
 
 
